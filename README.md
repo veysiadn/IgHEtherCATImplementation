@@ -1,5 +1,5 @@
 # IgHEtherCATImplementation
-This repository contains implementation on Linux.
+This repository contains implementation of IgH EtherCAT Master on Ubuntu 14.04.6 LTS ; kernel 4.4.x
   
 # Prerequisites
   -> If you want to have realtime performance for IgH EtherCAT Master library you must have supported hardware driver by IgH to see if you have required NIC check;
