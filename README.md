@@ -9,9 +9,11 @@ This repository contains implementation of IgH EtherCAT Master on Ubuntu 14.04.6
 if you see your network card driver compare it with supported NIC drivers from both IgH and RTnet
 
 https://etherlab.org/en/ethercat/hardware.php (IgH EtherCAT official page)
+
 http://hg.code.sf.net/p/etherlabmaster/code (IgH EtherCAT repo page)
 
 http://www.rtnet.org/   (RTnet official page.)
+
 https://sourceforge.net/p/rtnet/news/  (RTnet repo page.)
 
 -> make sure that your kernel version is 4.4.x (for IgH EtherCAT) and 3.2.x for RTnet , check by  ;
@@ -32,7 +34,7 @@ https://sourceforge.net/p/rtnet/news/  (RTnet repo page.)
     $ sudo cp /boot/config-4.4.0-148-generic .config
     $ sudo mv ../linux-4.4.240 /usr/src/ -f
     $ cd /usr/src/linux-4.4.240
-## Config file that is referred in here is my kernel file it can vary.check your boot folder.
+## Config file that is referred in here is my kernel file it can vary.Check your boot folder.
 
     $ sudo make  menuconfig
 
@@ -47,7 +49,7 @@ https://sourceforge.net/p/rtnet/news/  (RTnet repo page.)
     $ uname -v
 
 
-###### IgH EtherCAT Master Stack Installation #################
+## IgH EtherCAT Master Stack Installation
 
     $ hg clone http://hg.code.sf.net/p/etherlabmaster/code ethercat-hg
     $ cd ethercat-hg
@@ -59,11 +61,15 @@ https://sourceforge.net/p/rtnet/news/  (RTnet repo page.)
     $ sudo ln -s ethercat-hg ethercat
 
 Move into the source directory
-    # cd ethercat
 
-## Configuration part is important for this part refer to 
+    $ cd ethercat
+
+## Configuration part is important for this part refer to
+
 https://etherlab.org/download/ethercat/ethercat-1.5.2.pdf
+
 Chapter 9.2 table 9.1 : configuration options in my case my laptop has
+
 r8169 driver, I have to enable it.You can check the document for detailed instruction.
 
     $ sudo ./configure --enable-8139too=no --enable-r8169 --prefix=/opt/etherlab
@@ -72,14 +78,21 @@ r8169 driver, I have to enable it.You can check the document for detailed instru
     $ make modules 
     $ make install
     $ make modules_install
-## after succesfull (error free) installation the we'll check HWAddr (Hardware Address, also known as the MAC Address) of the adapter we'd like to use (example: eth0) and record it. We'll need to type it in later.
-3c:7c:3f:ea:61:36
+-> after succesfull (error free) installation the we'll check HWAddr (Hardware Address, also known as the MAC Address) of the adapter we'd like to use 
+
+(example: eth0) and record it. We'll need to type it in later.
+
+
     $ sudo ifconfig
+    
     $ sudo mkdir /etc/sysconfig/
+    
     $ sudo cp /opt/etherlab/etc/sysconfig/ethercat /etc/sysconfig/
+    
     $ sudo nano /etc/sysconfig/ethercat
 
 ## You need to setup this file as prescribed in the EtherCAT manual. You definitely need to change the values for MASTER0_DEVICE, which need the MAC address of the Ethernet card you've selected, and then the driver you'd like to use for that device.
+
 For a development system, "generic" is fine. For a production system, the hope is that you've selected a target machine with a supported network device. We typically used cards supported by the r8169 driver, but check the hardware specs if you’re unsure.
 
 Example:
@@ -102,7 +115,7 @@ DEVICE_MODULES="r8169"
 
       $ sudo nano /etc/udev/rules.d/99-EtherCAT.rules
       
-### Enter the following contents:
+## Enter the following contents:
 
     KERNEL=="EtherCAT[0-9]*", MODE="0664", GROUP="users"
 
@@ -126,8 +139,6 @@ after this command you should see something like this :
 [ 2039.042040] EtherCAT 0: Starting EtherCAT-IDLE thread.
 
 If you face any problem you can check these threads : 
-    https://lists.etherlab.org/pipermail/etherlab-dev/2014/000384.html
-
-    https://etherlab.org/download/ethercat/ethercat-1.5.2.pdf
-
+[EtherLAB Mailing List Implementation ](https://lists.etherlab.org/pipermail/etherlab-dev/2014/000384.html)
+[EtherLAB Documentation ](https://etherlab.org/download/ethercat/ethercat-1.5.2.pdf)
 
