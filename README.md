@@ -129,16 +129,26 @@ DEVICE_MODULES="r8169"
     $ dmesg
     
 after this command you should see something like this : 
+
 [ 2038.604876] EtherCAT: Master driver 1.5.2 334c34cfd2e5
+
 [ 2038.605018] EtherCAT: 1 master waiting for devices.
+
 [ 2038.968282] ec_r8169 Gigabit Ethernet driver 2.3LK-NAPI loaded
+
 [ 2038.968303] ec_r8169 0000:03:00.0: can't disable ASPM; OS doesn't have ASPM control
+
 [ 2038.977080] EtherCAT: Accepting DC:FE:07:21:A6:75 as main device for master 0.
+
 [ 2038.977099] ec_r8169 0000:03:00.0 ecm0 (uninitialized): RTL8168g/8111g at 0xffffc90002936000, dc:fe:07:21:a6:75, XID 0c000880 IRQ 127
+
 [ 2038.977106] ec_r8169 0000:03:00.0 ecm0 (uninitialized): jumbo features [frames: 9200 bytes, tx checksumming: ko]
+
 [ 2039.042040] EtherCAT 0: Starting EtherCAT-IDLE thread.
 
 If you face any problem you can check these threads : 
+
 [EtherLAB Mailing List Implementation ](https://lists.etherlab.org/pipermail/etherlab-dev/2014/000384.html)
+
 [EtherLAB Documentation ](https://etherlab.org/download/ethercat/ethercat-1.5.2.pdf)
 
