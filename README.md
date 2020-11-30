@@ -23,7 +23,7 @@ https://sourceforge.net/p/rtnet/news/  (RTnet repo page.)
 ## Before start to build run these commands to get required libraries for installation.
 
     $ sudo apt-get update
-    $ sudo apt-get install git build-essential automake autoconf libtool pkg-config cmake intltool autoconf-archive libpcre3-dev libglib2.0-dev libgtk-3-dev libxml2-utils libnuma-dev libssl-dev libtool libncurses5 libncurses5-dev autogen libudev-dev
+    $ sudo apt-get install git build-essential automake autoconf libtool pkg-config cmake intltool autoconf-archive libpcre3-dev libglib2.0-dev libgtk-3-dev libxml2-utils libnuma-dev libssl-dev libtool libncurses5 libncurses5-dev autogen libudev-dev libelf-dev
     $ sudo apt-get install kernel-package fakeroot zlib1g-dev bin86 g++ mercurial
 
     $ git clone https://github.com/veysiadn/IgHEtherCATImplementation
