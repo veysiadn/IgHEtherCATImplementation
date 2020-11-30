@@ -23,7 +23,7 @@ https://sourceforge.net/p/rtnet/news/  (RTnet repo page.)
 ## Before start to build run these commands to get required libraries for installation.
 
     $ sudo apt-get update
-    $ sudo apt install git build-essential automake autoconf libtool pkg-config cmake intltool autoconf-archive libpcre3-dev libglib2.0-dev libgtk-3-dev libxml2-utils libnuma-dev libssl-dev libtool libncurses5 libncurses5-dev autogen
+    $ sudo apt-get install git build-essential automake autoconf libtool pkg-config cmake intltool autoconf-archive libpcre3-dev libglib2.0-dev libgtk-3-dev libxml2-utils libnuma-dev libssl-dev libtool libncurses5 libncurses5-dev autogen libudev-dev
     $ sudo apt-get install kernel-package fakeroot zlib1g-dev bin86 g++ mercurial
 
     $ git clone https://github.com/veysiadn/IgHEtherCATImplementation
@@ -34,7 +34,7 @@ https://sourceforge.net/p/rtnet/news/  (RTnet repo page.)
     $ sudo cp /boot/config-4.4.0-148-generic .config
     $ sudo mv ../linux-4.4.240 /usr/src/ -f
     $ cd /usr/src/linux-4.4.240
-## Config file that is referred in here is my kernel file it can vary.Check your boot folder.
+#### Config file that is referred in here is my kernel file it can vary.Check your boot folder.
 
     $ sudo make  menuconfig
 
@@ -91,9 +91,9 @@ r8169 driver, I have to enable it.You can check the document for detailed instru
     
     $ sudo nano /etc/sysconfig/ethercat
 
-## You need to setup this file as prescribed in the EtherCAT manual. You definitely need to change the values for MASTER0_DEVICE, which need the MAC address of the Ethernet card you've selected, and then the driver you'd like to use for that device.
+-> You need to setup this file as prescribed in the EtherCAT manual. You definitely need to change the values for MASTER0_DEVICE, which need the MAC address of the Ethernet card you've selected, and then the driver you'd like to use for that device.
 
-For a development system, "generic" is fine. For a production system, the hope is that you've selected a target machine with a supported network device. We typically used cards supported by the r8169 driver, but check the hardware specs if you’re unsure.
+-> For a development system, "generic" is fine. For a production system, the hope is that you've selected a target machine with a supported network device. We typically used cards supported by the r8169 driver, but check the hardware specs if you’re unsure.
 
 Example:
 
@@ -105,7 +105,7 @@ DEVICE_MODULES="r8169"
     $ cd /opt/etherlab
     $ exit
     
-## Copy the initialization script (If this doesn't work, make sure that there isn't a /etc/init.d/ethercat already. If so, remove it), change its ownership properties.
+-> Copy the initialization script (If this doesn't work, make sure that there isn't a /etc/init.d/ethercat already. If so, remove it), change its ownership properties.
 
       $ sudo cp ./etc/init.d/ethercat /etc/init.d/
 
