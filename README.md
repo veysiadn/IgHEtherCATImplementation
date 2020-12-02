@@ -159,9 +159,9 @@ after this command you should see something like this :
     $ sudo apt install stress
     $ stress -v -c 8 -i 10 -d 8
  
-- > The EtherLAB EtherCAT master is now running on the system. The next task is to setup the system so that other programs can use the master. You need to add /opt/etherlab/lib to your /etc/ld.so.conf so that the user programs calling it can link to the shared object.
+-> The EtherLAB EtherCAT master is now running on the system. The next task is to setup the system so that other programs can use the master. You need to add /opt/etherlab/lib to your /etc/ld.so.conf so that the user programs calling it can link to the shared object.
 
-    $sudo nano /etc/ld.so.conf
+    $ sudo nano /etc/ld.so.conf
 
 THIS LINE WILL ALREADY EXIST ==> include /etc/ld.so.conf.d/*.conf
 
