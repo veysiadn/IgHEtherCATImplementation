@@ -23,7 +23,7 @@ https://sourceforge.net/p/rtnet/news/  (RTnet repo page.)
 ## Before start to build run these commands to get required libraries for installation.
 
     $ sudo apt-get update
-    $ sudo apt-get install git build-essential automake autoconf libtool pkg-config cmake intltool autoconf-archive libpcre3-dev libglib2.0-dev libgtk-3-dev libxml2-utils libnuma-dev libssl-dev libtool libncurses5 libncurses5-dev autogen libudev-dev libelf-dev
+    $ sudo apt-get install git build-essential automake autoconf libtool pkg-config cmake intltool autoconf-archive libpcre3-dev libglib2.0-dev libgtk-3-dev libxml2-utils libnuma-dev libssl-dev libtool libncurses5 libncurses5-dev autogen libudev-dev libelf-dev stress
     $ sudo apt-get install kernel-package fakeroot zlib1g-dev bin86 g++ mercurial
 
     $ git clone https://github.com/veysiadn/IgHEtherCATImplementation
@@ -127,7 +127,15 @@ DEVICE_MODULES="r8169"
 
     $ sudo /etc/init.d/ethercat start
     $ dmesg
-    
+
+ -> If you want to start ethercat from terminal directly without changing directory  you can create symbolic link: 
+ 
+     $ sudo ln -s /etc/init.d/ethercat /usr/local/bin/ethercatctl
+ 
+ -> And now you can test it.
+ 
+    $ sudo ethercatctl start  
+ 
 after this command you should see something like this : 
 
 [ 2038.604876] EtherCAT: Master driver 1.5.2 334c34cfd2e5
@@ -145,6 +153,13 @@ after this command you should see something like this :
 [ 2038.977106] ec_r8169 0000:03:00.0 ecm0 (uninitialized): jumbo features [frames: 9200 bytes, tx checksumming: ko]
 
 [ 2039.042040] EtherCAT 0: Starting EtherCAT-IDLE thread.
+
+ -> if you want to test your program under stress test ;
+ 
+    $ sudo apt install stress
+    $ stress -v -c 8 -i 10 -d 8
+ 
+
 
 If you face any problem you can check these threads : 
 
