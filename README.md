@@ -30,7 +30,7 @@ if you see your network card driver compare it with supported NIC drivers from b
 
 ## RT_PREEMPT patch Installation 
 #### You can download kernel version from                   : [Linux Kernel Sources](https://mirrors.edge.kernel.org/pub/linux/kernel/) 
-#### You can download RT_Preempt version with same kernel   : [RT_PREEMPT Patch Sources(https://mirrors.edge.kernel.org/pub/linux/kernel/projects/rt/)
+#### You can download RT_Preempt version with same kernel   : [RT_PREEMPT Patch Sources](https://mirrors.edge.kernel.org/pub/linux/kernel/projects/rt/)
     $ git clone https://github.com/veysiadn/IgHEtherCATImplementation
     $ cd IgHEtherCATImplementation
     $ xz -cd linux-4.4.240.tar.xz | tar xvf -
