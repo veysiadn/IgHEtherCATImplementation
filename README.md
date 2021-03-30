@@ -8,13 +8,13 @@ This repository contains implementation of IgH EtherCAT Master on Ubuntu 14.04.6
 
 if you see your network card driver compare it with supported NIC drivers from both IgH and RTnet
 
-https://etherlab.org/en/ethercat/hardware.php (IgH EtherCAT official page)
+[IgH EtherCAT Official Page](https://etherlab.org/en/ethercat/hardware.php) (IgH EtherCAT official page)
 
-http://hg.code.sf.net/p/etherlabmaster/code (IgH EtherCAT repo page)
+[Source Code IgH EtherCAT](http://hg.code.sf.net/p/etherlabmaster/code) (IgH EtherCAT repo page)
 
-http://www.rtnet.org/   (RTnet official page.)
+[RTNET](http://www.rtnet.org/)   (RTnet official page.)
 
-https://sourceforge.net/p/rtnet/news/  (RTnet repo page.)
+[RTNET Source](https://sourceforge.net/p/rtnet/news/)  (RTnet repo page.)
 
 -> make sure that your kernel version is 4.4.x (for IgH EtherCAT) and 3.2.x for RTnet , check by  ;
 
@@ -26,6 +26,9 @@ https://sourceforge.net/p/rtnet/news/  (RTnet repo page.)
     $ sudo apt-get install git build-essential automake autoconf libtool pkg-config cmake intltool autoconf-archive libpcre3-dev libglib2.0-dev libgtk-3-dev libxml2-utils libnuma-dev libssl-dev libtool libncurses5 libncurses5-dev autogen libudev-dev libelf-dev stress
     $ sudo apt-get install kernel-package fakeroot zlib1g-dev bin86 g++ mercurial
 
+## RT_PREEMPT patch Installation 
+#### You can download kernel version from                   : [Linux Kernel Sources](https://mirrors.edge.kernel.org/pub/linux/kernel/) 
+#### You can download RT_Preempt version with same kernel   : [RT_PREEMPT PATCH SOURCE](https://mirrors.edge.kernel.org/pub/linux/kernel/projects/rt/)
     $ git clone https://github.com/veysiadn/IgHEtherCATImplementation
     $ cd IgHEtherCATImplementation
     $ xz -cd linux-4.4.240.tar.xz | tar xvf -
@@ -66,7 +69,7 @@ Move into the source directory
 
 ## Configuration part is important for this part refer to
 
-https://etherlab.org/download/ethercat/ethercat-1.5.2.pdf
+[IgH EtherCAT Library Documentattion](https://etherlab.org/download/ethercat/ethercat-1.5.2.pdf)
 
 Chapter 9.2 table 9.1 : configuration options in my case my laptop has
 
