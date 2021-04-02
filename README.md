@@ -26,7 +26,7 @@ if you see your network card driver compare it with supported NIC drivers from b
     $ sudo apt-get install git build-essential automake autoconf libtool pkg-config cmake linux-source bc kmod cpio flex -y
     $ sudo apt-get install intltool autoconf-archive libpcre3-dev libglib2.0-dev libgtk-3-dev libxml2-utils -y
     $ sudo apt-get install libnuma-dev libssl-dev libtool libncurses5 libncurses5-dev autogen libudev-dev libelf-dev stress -y
-    $ sudo apt-get install kernel-package fakeroot zlib1g-dev bin86 g++ mercurial -y
+    $ sudo apt-get install kernel-package fakeroot zlib1g-dev bin86 g++ mercurial bison -y
 
 ## RT_PREEMPT patch Installation 
 #### You can download kernel version from                   : [Linux Kernel Sources](https://mirrors.edge.kernel.org/pub/linux/kernel/) 
