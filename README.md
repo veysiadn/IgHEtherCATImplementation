@@ -4,7 +4,7 @@ This repository contains implementation of IgH EtherCAT Master on Ubuntu 14.04.6
 # Start from scratch : 
 -> check network card interface driver by ;
 
-    $ lshw -C network
+     lshw -C network
 
 if you see your network card driver compare it with supported NIC drivers from both IgH and RTnet
 
