@@ -44,8 +44,18 @@ if you see your network card driver compare it with supported NIC drivers from b
      sudo make  menuconfig
 
 ## In menu that will be show up we select;
- Processor type and features -> Preemption Model -> Fully Preemptible Kernel (RT).
+ Processor type and features -> Preemption Model -> Fully Preemptible Kernel (RT).Alternatively you can configure text file.
+ 
+CONFIG_PREEMPT_RT_FULL
 
+CONFIG_CPU_FREQ=n
+
+CONFIG_CPU_IDLE=n
+
+CONFIG_NO_HZ_FULL=y
+
+CONFIG_RCU_NOCB_CPU=y
+ 
      sudo -s
      make -j4
      make && make modules && make modules_install && make install
