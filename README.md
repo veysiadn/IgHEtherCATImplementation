@@ -44,13 +44,19 @@ if you see your network card driver compare it with supported NIC drivers from b
      sudo make  menuconfig
 
 ## In menu that will be show up we select;
- Processor type and features -> Preemption Model -> Fully Preemptible Kernel (RT).Alternatively you can configure text file.
+ Processor type and features -> Preemption Model -> Fully Preemptible Kernel (RT).
+ 
+ Alternatively you can configure text file.
  When measuring system latency all kernel debug options should be turned off. They require much overhead and distort the measurement result. Examples for those debug mechanism are:
 
 DEBUG_PREEMPT
+
 Lock Debugging (spinlocks, mutexes, etc. . . )
+
 DEBUG_OBJECTS
+
 …
+
 Some of those debugging mechanisms (like lock debugging) produce a randomized overhead in a range of some micro seconds to several milliseconds depending on the kernel configuration as well as on the compile options (DEBUG_PREEMPT has a low overhead compared to Lock Debugging or DEBUG_OBJECTS).
 
 However, in the first run of a real-time capable Linux kernel it might be advisable to use those debugging mechanisms. This helps to locate fundamental problems.
