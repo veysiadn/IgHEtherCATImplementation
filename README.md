@@ -63,6 +63,12 @@ However, in the first run of a real-time capable Linux kernel it might be advisa
 
 [Wiki-RT-Linux](https://wiki.linuxfoundation.org/realtime/documentation/howto/applications/preemptrt_setup/)  (RT-Linux-Wiki)
 
+CONFIG_SYSTEM_TRUSTED_KEYS="" , this part should be empty.
+
+For additional kernel configurations check [My-Xenomai-Installation](https://github.com/veysiadn/xenomai-install) (Configurations For Realtime). Just ignore ACPI settings and Xenomai related configurations and apply all other configurations, for better real-time performance. Note that only Fully Preemptible Kernel option is enough, but if you want better performance you can try those options as well.
+
+
+
 CONFIG_PREEMPT_RT_FULL
 
 CONFIG_CPU_FREQ=n
