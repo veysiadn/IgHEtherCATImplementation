@@ -1,26 +1,23 @@
 # IgHEtherCATImplementation
-This repository contains implementation of IgH EtherCAT Master on Ubuntu 14.04.6 LTS ; kernel 4.4.x
+This repository contains implementation of IgH EtherCAT Master on Ubuntu 14.04.6 LTS ; kernel 4.4.x. If you want to install with different kernel, installation steps are same, you just have to download your desired kernel sources from [Linux Kernel Sources](https://mirrors.edge.kernel.org/pub/linux/kernel/) and [RT_PREEMPT Patch Sources](https://mirrors.edge.kernel.org/pub/linux/kernel/projects/rt/). Hope this repository will save time for you.
   
 # Start from scratch : 
 -> check network card interface driver by ;
 
      lshw -C network
 
-if you see your network card driver compare it with supported NIC drivers from both IgH and RTnet
+if you see your network card driver compare it with supported NIC drivers from  IgH
 
-[IgH EtherCAT Official Page](https://etherlab.org/en/ethercat/hardware.php) (IgH EtherCAT official page)
+[IgH EtherCAT Official Page](https://etherlab.org/en/ethercat/hardware.php) (IgH EtherCAT Native Driver Supported Hardware)
 
 [Source Code IgH EtherCAT](https://gitlab.com/etherlab.org/ethercat.git) (IgH EtherCAT repo page)
 
-[RTNET](http://www.rtnet.org/)   (RTnet official page.)
 
-[RTNET Source](https://sourceforge.net/p/rtnet/news/)  (RTnet repo page.)
-
--> make sure that your kernel version is 4.4.x (for IgH EtherCAT) and 3.2.x for RTnet , check by  ;
+-> make sure that your kernel version is 4.4.x (for IgH EtherCAT)  check by ;
 
      uname -r 
 
-## Before start to build run these commands to get required libraries for installation.
+## Before starting  to build run these commands to get required libraries for installation.
 
      sudo apt-get update
      sudo apt-get install git build-essential automake autoconf libtool pkg-config cmake linux-source bc kmod cpio flex -y
@@ -68,7 +65,6 @@ CONFIG_SYSTEM_TRUSTED_KEYS="" , this part should be empty.
 For additional kernel configurations check [My-Xenomai-Installation](https://github.com/veysiadn/xenomai-install) (Configurations For Realtime). Just ignore ACPI settings and Xenomai related configurations and apply all other configurations, for better real-time performance. Note that only Fully Preemptible Kernel option is enough, but if you want better performance you can try those options as well.
 
 
-
 CONFIG_PREEMPT_RT_FULL
 
 CONFIG_CPU_FREQ=n
@@ -96,11 +92,11 @@ CONFIG_RCU_NOCB_CPU=y
      cd
      sudo mv ethercat-hg /usr/local/src/
      cd /usr/local/src/
-     sudo ln -s ethercat-hg ethercat
+     sudo ln -s /usr/local/src/ethercat-hg ~/ethercat
 
 Move into the source directory
 
-     cd ethercat
+     cd ~/ethercat
 
 ## Configuration part is important for this part refer to
 
@@ -223,7 +219,11 @@ You can see if it got installed by running:
      ldconfig -v | grep libether*
 
 
-
+### BONUS : Qt Installation 
+```sh
+sudo apt-get install  qtcreator qt5-default qt5-doc qt5-doc-html qtbase5-doc-html qtbase5-examples –y 
+sudo /sbin/ldconfig -v
+```
 
 If you face any problem you can check these threads : 
 
