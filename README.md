@@ -1,4 +1,4 @@
-# IgHEtherCATImplementation
+# IgH EtherCAT Implementation Guide
 This repository contains implementation of IgH EtherCAT Master on Ubuntu 14.04.6 LTS ; kernel 4.4.x. If you want to install with different kernel, installation steps are same, you just have to download your desired kernel sources from [Linux Kernel Sources](https://mirrors.edge.kernel.org/pub/linux/kernel/) and [RT_PREEMPT Patch Sources](https://mirrors.edge.kernel.org/pub/linux/kernel/projects/rt/). Hope this repository will save time for you.
   
 # Start from scratch : 
