@@ -2,22 +2,22 @@
 This repository contains implementation of IgH EtherCAT Master on Ubuntu 14.04.6 LTS ; kernel 4.4.x. If you want to install with different kernel, installation steps are same, you just have to download your desired kernel sources from [Linux Kernel Sources](https://mirrors.edge.kernel.org/pub/linux/kernel/) and [RT_PREEMPT Patch Sources](https://mirrors.edge.kernel.org/pub/linux/kernel/projects/rt/). Hope this repository will save time for you.
   
 # Start from scratch : 
--> check network card interface driver by ;
+-> If you want to use native drivers provided by IgH check network card interface driver by ;
 
      lshw -C network
 
-if you see your network card driver compare it with supported NIC drivers from  IgH
+if you see your network card driver, compare it with supported NIC drivers from  IgH.
 
 [IgH EtherCAT Official Page](https://etherlab.org/en/ethercat/hardware.php) (IgH EtherCAT Native Driver Supported Hardware)
 
 [Source Code IgH EtherCAT](https://gitlab.com/etherlab.org/ethercat.git) (IgH EtherCAT repo page)
 
 
--> make sure that your kernel version is 4.4.x (for IgH EtherCAT)  check by ;
+-> Check your kernel version ;
 
      uname -r 
 
-## Before starting  to build run these commands to get required libraries for installation.
+## Before starting to build, run these commands to get required libraries for building/installation.
 
      sudo apt-get update
      sudo apt-get install git build-essential automake autoconf libtool pkg-config cmake linux-source bc kmod cpio flex -y
@@ -28,6 +28,18 @@ if you see your network card driver compare it with supported NIC drivers from  
 ## RT_PREEMPT patch Installation 
 #### You can download kernel version from                   : [Linux Kernel Sources](https://mirrors.edge.kernel.org/pub/linux/kernel/) 
 #### You can download RT_Preempt version with same kernel   : [RT_PREEMPT Patch Sources](https://mirrors.edge.kernel.org/pub/linux/kernel/projects/rt/)
+#### If you want to use different kernel change the 4.4.240 part with your kernel version.
+     mkdir sources
+     cd sources
+#### This part is for different kernel
+     wget https://mirrors.edge.kernel.org/pub/linux/kernel/v5.x/linux-5.9.1.tar.xz
+     wget https://mirrors.edge.kernel.org/pub/linux/kernel/projects/rt/5.9/patch-5.9.1-rt20.patch.xz
+     xz -cd linux-5.9.1.tar.xz | tar xvf -
+     cd linux-5.9.1
+     xzcat ../patch-5.9.1-rt20.patch.xz | patch -p1
+     sudo mv ../linux-5.9.1 /usr/src/ -f
+     cd /usr/src/linux-5.9.1
+##### Different kernel part finished. You can skip step below if you're using different kernel.
      git clone https://github.com/veysiadn/IgHEtherCATImplementation
      cd IgHEtherCATImplementation
      xz -cd linux-4.4.240.tar.xz | tar xvf -
