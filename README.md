@@ -4,7 +4,7 @@ This repository contains implementation of IgH EtherCAT Master on Ubuntu 14.04.6
 # Start from scratch : 
 -> If you want to use native drivers provided by IgH check network card interface driver by ;
 
-     lshw -C network
+     lshw -C network | grep driver
 
 if you see your network card driver, compare it with supported NIC drivers from  IgH.
 
@@ -91,6 +91,7 @@ CONFIG_RCU_NOCB_CPU=y
      make -j4
      make && make modules && make modules_install && make install
      reboot
+ ### If your system doesn't start after building check this thread [Compressing initramfs](https://stackoverflow.com/questions/51669724/install-rt-linux-patch-for-ubuntu)
  ## After reboot to make sure about installation check kernel version again 
      uname -v
 
@@ -139,7 +140,7 @@ r8169 driver, I have to enable it.You can check the document for detailed instru
 
 -> You need to setup this file as prescribed in the EtherCAT manual. You definitely need to change the values for MASTER0_DEVICE, which need the MAC address of the Ethernet card you've selected, and then the driver you'd like to use for that device.
 
--> For a development system, "generic" is fine. For a production system, the hope is that you've selected a target machine with a supported network device. We typically used cards supported by the r8169 driver, but check the hardware specs if you’re unsure.
+-> For a development system, "generic" is fine. For a production system, the hope is that you've selected a target machine with a supported network device. We typically used cards supported by the r8169 driver, but check the hardware specs if you’re unsure. If you're using newer kernels type "generic", it's not supported for newer kernels.You can see supported native driver kernel version in Etherlab webpage.
 
 Example:
 
