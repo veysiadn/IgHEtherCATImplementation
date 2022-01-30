@@ -92,6 +92,27 @@ CONFIG_RCU_NOCB_CPU=y
      make && make modules && make modules_install && make install
      reboot
  ### If your system doesn't start after building check this thread [Compressing initramfs](https://stackoverflow.com/questions/51669724/install-rt-linux-patch-for-ubuntu)
+  After installing the new kernel, I got into a kernel panic. The problem was that the initrd image was too big. I solved that with:
+  Restart your computer start with non-rt kernel. Open your terminal:
+  ### Step 1 - Strip the kernel modules
+  
+    cd /lib/modules/5.9.1-rt20
+    sudo find . -name *.ko -exec strip --strip-unneeded {} +
+
+  ### Step 2 - Change the initramfs compression
+  
+    sudo nano /etc/initramfs-tools/initramfs.conf
+  
+  find COMPRESS option and change it to xz, after change it should be like below:
+  
+    COMPRESS=xz
+
+  save and exit (CTRL+X and Y and Enter).
+  ### Step 3 - Update initramfs
+  
+    sudo update-initramfs -u -k 5.9.1-rt20
+    sudo update-grub2
+ 
  ## After reboot to make sure about installation check kernel version again 
      uname -v
 
