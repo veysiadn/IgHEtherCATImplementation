@@ -1,37 +1,30 @@
-# IgH EtherCAT Implementation Guide
-This repository contains implementation of IgH EtherCAT Master on Ubuntu 14.04.6 LTS ; kernel 4.4.x. If you want to install with different kernel, installation steps are same, you just have to download your desired kernel sources from [Linux Kernel Sources](https://mirrors.edge.kernel.org/pub/linux/kernel/) and [RT_PREEMPT Patch Sources](https://mirrors.edge.kernel.org/pub/linux/kernel/projects/rt/). Hope this repository will save time for you.
+# RT_PREEMPT & IgH EtherCAT Installation Guide
+This repository contains installation of RT_PREEMPT patch on Ubuntu 20.04.4 LTS ; kernel 5.9.1 and IgH EtherCAT Master stack. If you want to install with different kernel, installation steps are same, you just have to download your desired kernel sources from [Linux Kernel Sources](https://mirrors.edge.kernel.org/pub/linux/kernel/) and [RT_PREEMPT Patch Sources](https://mirrors.edge.kernel.org/pub/linux/kernel/projects/rt/). Hope this repository will save time for you.
   
-# Start from scratch : 
--> If you want to use native drivers provided by IgH check network card interface driver by ;
-
-     lshw -C network | grep driver
-
-if you see your network card driver, compare it with supported NIC drivers from  IgH.
-
-[IgH EtherCAT Official Page](https://etherlab.org/en/ethercat/hardware.php) (IgH EtherCAT Native Driver Supported Hardware)
-
-[Source Code IgH EtherCAT](https://gitlab.com/etherlab.org/ethercat.git) (IgH EtherCAT repo page)
-
-
--> Check your kernel version ;
-
-     uname -r 
 
 ## Before starting to build, run these commands to get required libraries for building/installation.
-
-     sudo apt-get update
-     sudo apt-get install git build-essential automake autoconf libtool pkg-config cmake linux-source bc kmod cpio flex -y
-     sudo apt-get install intltool autoconf-archive libpcre3-dev libglib2.0-dev libgtk-3-dev libxml2-utils -y
-     sudo apt-get install libnuma-dev libssl-dev libtool libncurses5 libncurses5-dev autogen libudev-dev libelf-dev stress -y
-     sudo apt-get install kernel-package fakeroot zlib1g-dev bin86 g++ bison -y
-
+```
+sudo apt-get update
+```   
+```
+sudo apt-get install git build-essential automake autoconf libtool pkg-config cmake linux-source bc kmod cpio flex -y
+```
+```
+sudo apt-get install intltool autoconf-archive libpcre3-dev libglib2.0-dev libgtk-3-dev libxml2-utils -y
+```
+```
+sudo apt-get install libnuma-dev libssl-dev libtool libncurses5 libncurses5-dev autogen libudev-dev libelf-dev stress -y
+```   
+```
+sudo apt-get install kernel-package fakeroot zlib1g-dev bin86 g++ bison -y
+```
 ## RT_PREEMPT patch Installation 
 #### You can download kernel version from                   : [Linux Kernel Sources](https://mirrors.edge.kernel.org/pub/linux/kernel/) 
 #### You can download RT_Preempt version with same kernel   : [RT_PREEMPT Patch Sources](https://mirrors.edge.kernel.org/pub/linux/kernel/projects/rt/)
-#### If you want to use different kernel change the 4.4.240 part with your kernel version.
+#### Create source folder where you will keep all build sources. It is important to keep it tidy.
      mkdir sources
      cd sources
-#### This part is for different kernel
+#### Download the kernel source and download corresponding RT patch. Note that patch has same version 5.9.1 as kernel.
      wget https://mirrors.edge.kernel.org/pub/linux/kernel/v5.x/linux-5.9.1.tar.xz
      wget https://mirrors.edge.kernel.org/pub/linux/kernel/projects/rt/5.9/patch-5.9.1-rt20.patch.xz
      xz -cd linux-5.9.1.tar.xz | tar xvf -
@@ -39,15 +32,7 @@ if you see your network card driver, compare it with supported NIC drivers from 
      xzcat ../patch-5.9.1-rt20.patch.xz | patch -p1
      sudo mv ../linux-5.9.1 /usr/src/ -f
      cd /usr/src/linux-5.9.1
-##### Different kernel part finished. You can skip step below if you're using different kernel.
-     git clone https://github.com/veysiadn/IgHEtherCATImplementation
-     cd IgHEtherCATImplementation
-     xz -cd linux-4.4.240.tar.xz | tar xvf -
-     cd linux-4.4.240
-     xzcat ../patch-4.4.240-rt209.patch.xz | patch -p1
-     sudo cp /boot/config-4.4.0-148-generic .config
-     sudo mv ../linux-4.4.240 /usr/src/ -f
-     cd /usr/src/linux-4.4.240
+     
 #### Config file that is referred in here is my kernel file it can vary.Check your boot folder.
 
      sudo make  menuconfig
@@ -55,7 +40,7 @@ if you see your network card driver, compare it with supported NIC drivers from 
 ## In menu that will be show up we select;
  Processor type and features -> Preemption Model -> Fully Preemptible Kernel (RT).
  
- Alternatively you can configure text file.
+ Alternatively you can edit .config file, which includes all settings that you see in menuconfig window.
  When measuring system latency all kernel debug options should be turned off. They require much overhead and distort the measurement result. Examples for those debug mechanism are:
 
 DEBUG_PREEMPT
@@ -69,29 +54,36 @@ DEBUG_OBJECTS
 Some of those debugging mechanisms (like lock debugging) produce a randomized overhead in a range of some micro seconds to several milliseconds depending on the kernel configuration as well as on the compile options (DEBUG_PREEMPT has a low overhead compared to Lock Debugging or DEBUG_OBJECTS).
 
 However, in the first run of a real-time capable Linux kernel it might be advisable to use those debugging mechanisms. This helps to locate fundamental problems.
+For more details : [Wiki-RT-Linux](https://wiki.linuxfoundation.org/realtime/documentation/howto/applications/preemptrt_setup/)  (RT-Linux-Wiki)
 
-[Wiki-RT-Linux](https://wiki.linuxfoundation.org/realtime/documentation/howto/applications/preemptrt_setup/)  (RT-Linux-Wiki)
+#### Note in your .config file.
 
-CONFIG_SYSTEM_TRUSTED_KEYS="" , this part should be empty.
+    CONFIG_SYSTEM_TRUSTED_KEYS=""
+###### part above should be empty, otherwise it will give an error during make process.
 
+
+#### OPTIONAL
 For additional kernel configurations check [My-Xenomai-Installation](https://github.com/veysiadn/xenomai-install) (Configurations For Realtime). Just ignore ACPI settings and Xenomai related configurations and apply all other configurations, for better real-time performance. Note that only Fully Preemptible Kernel option is enough, but if you want better performance you can try those options as well.
 
+     CONFIG_PREEMPT_RT_FULL
 
-CONFIG_PREEMPT_RT_FULL
+    CONFIG_CPU_FREQ=n
 
-CONFIG_CPU_FREQ=n
+    CONFIG_CPU_IDLE=n
 
-CONFIG_CPU_IDLE=n
+    CONFIG_NO_HZ_FULL=y
 
-CONFIG_NO_HZ_FULL=y
-
-CONFIG_RCU_NOCB_CPU=y
- 
+    CONFIG_RCU_NOCB_CPU=y
+ #### ------------------------------------------------------------------
+## Now we are ready for kernel compilation.
      sudo -s
      make -j4
      make && make modules && make modules_install && make install
      reboot
- ### If your system doesn't start after building check this thread [Compressing initramfs](https://stackoverflow.com/questions/51669724/install-rt-linux-patch-for-ubuntu)
+## After reboot to make sure about installation check kernel version. 
+     uname -v
+ ### -----------------------------------------------------------------------------------------------------------------
+ ### If your system doesn't start after building, check this thread [Compressing initramfs](https://stackoverflow.com/questions/51669724/install-rt-linux-patch-for-ubuntu) and apply steps below. 
   After installing the new kernel, I got into a kernel panic. The problem was that the initrd image was too big. I solved that with:
   Restart your computer start with non-rt kernel. Open your terminal:
   ### Step 1 - Strip the kernel modules
@@ -112,10 +104,19 @@ CONFIG_RCU_NOCB_CPU=y
   
     sudo update-initramfs -u -k 5.9.1-rt20
     sudo update-grub2
- 
- ## After reboot to make sure about installation check kernel version again 
-     uname -v
+ ### -----------------------------------------------------------------------------------------------------------------
 
+#### If everything is fine until now, we are ready for IgH EtherCAT master stack installation.
+# Start from scratch : 
+-> If you want to use native drivers provided by IgH check network card interface driver by ;
+
+     lshw -C network | grep driver
+
+if you see your network card driver, compare it with supported NIC drivers from  IgH. If you don't see your NIC don't worry, you can use generic driver. Besides currently with this kernel only generic driver works.
+
+[IgH EtherCAT Official Page](https://etherlab.org/en/ethercat/hardware.php) (IgH EtherCAT Native Driver Supported Hardware)
+
+[Source Code IgH EtherCAT](https://gitlab.com/etherlab.org/ethercat.git) (IgH EtherCAT repo page)
 
 ## IgH EtherCAT Master Stack Installation
 
@@ -148,10 +149,11 @@ r8169 driver, I have to enable it.You can check the document for detailed instru
     make modules_install
 -> after succesfull (error free) installation the we'll check HWAddr (Hardware Address, also known as the MAC Address) of the adapter we'd like to use 
 
-(example: eth0) and record it. We'll need to type it in later.
-
+(example: eth0) and record it. We'll need to type it in later. You can learn you NIC's MAC address by : 
 
     sudo ifconfig
+  
+ -> and now save copy MAC address, we will use it in the next step.
     
     sudo mkdir /etc/sysconfig/
     
