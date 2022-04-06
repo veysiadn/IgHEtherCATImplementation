@@ -10,7 +10,7 @@ sudo apt-get update
 sudo apt-get install git build-essential automake autoconf libtool pkg-config cmake linux-source bc kmod cpio flex -y
 ```
 ```
-sudo apt-get install intltool autoconf-archive libpcre3-dev libglib2.0-dev libgtk-3-dev libxml2-utils -y
+sudo apt-get install intltool autoconf-archive libpcre3-dev libglib2.0-dev libgtk-3-dev libxml2-utils zstd dwarves -y
 ```
 ```
 sudo apt-get install libnuma-dev libssl-dev libtool libncurses5 libncurses5-dev autogen libudev-dev libelf-dev stress -y
@@ -84,6 +84,22 @@ For additional kernel configurations check [My-Xenomai-Installation](https://git
      make && make modules && make modules_install && make install
      reboot
 ## After reboot to make sure about installation check kernel version. 
+     uname -v
+### If you see newer kernel version than the 5.9.1 it means that you have to change grub menu settings.
+ ```sh
+     sudo nano /etc/default/grub     
+ ```
+ ### Change settings like in below : 
+ ```
+    GRUB_TIMEOUT_STYLE = menu
+    GRUB_TIMEOUT = 10
+ ```
+ #### Save and exit, and then, 
+ ```
+  sudo update-grub
+  sudo reboot
+ ``` 
+ ## After reboot to make sure about installation check kernel version. 
      uname -v
  ### -----------------------------------------------------------------------------------------------------------------
  ### If your system doesn't start after building, check this thread [Compressing initramfs](https://stackoverflow.com/questions/51669724/install-rt-linux-patch-for-ubuntu) and apply steps below. 
