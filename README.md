@@ -83,6 +83,8 @@ For additional kernel configurations check [My-Xenomai-Installation](https://git
      make -j4
      make && make modules && make modules_install && make install
      reboot
+##### Just make sure there is no error during make and install process. If you face any error during make process, just read the error carefully, probably the solution will be in the explanation of the error. After reboot, if you see GRUB screen, select Advanced Options for Ubuntu, and select compiled RT kernel version to start.
+
 ## After reboot to make sure about installation check kernel version. 
      uname -v
 ### If you see newer kernel version than the 5.9.1 it means that you have to change grub menu settings.
@@ -99,7 +101,8 @@ For additional kernel configurations check [My-Xenomai-Installation](https://git
   sudo update-grub
   sudo reboot
  ``` 
- ## After reboot to make sure about installation check kernel version. 
+ #### After reboot, if you see GRUB screen, select Advanced Options for Ubuntu, and select compiled RT kernel version to start
+ ## Then to make sure about installation, check kernel version. 
      uname -v
  ### -----------------------------------------------------------------------------------------------------------------
  ### If your system doesn't start after building, check this thread [Compressing initramfs](https://stackoverflow.com/questions/51669724/install-rt-linux-patch-for-ubuntu) and apply steps below. 
