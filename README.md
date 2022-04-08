@@ -106,7 +106,6 @@ For additional kernel configurations check [My-Xenomai-Installation](https://git
      uname -v
  ### -----------------------------------------------------------------------------------------------------------------
  ### If your system doesn't start after building, check this thread [Compressing initramfs](https://stackoverflow.com/questions/51669724/install-rt-linux-patch-for-ubuntu) and apply steps below. 
-  After installing the new kernel, I got into a kernel panic. The problem was that the initrd image was too big. I solved that with:
   Restart your computer start with non-rt kernel. Open your terminal:
   ### Step 1 - Strip the kernel modules
   
