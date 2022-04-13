@@ -25,12 +25,12 @@ It is important to check the Etherlab documentation for configuration, for this 
     make install
     make modules_install
     
--> after succesfull (error free) installation the we'll check HWAddr (Hardware Address, also known as the MAC Address) of the adapter we'd like to use 
+-> After succesfull (error free) installation, we'll need to check HWAddr (Hardware Address, also known as the MAC Address) of the NIC we'd like to use 
 (example: eth0) and record it. We'll need to type it in later. You can check your NIC's MAC address by : 
 
     sudo ifconfig
   
- -> and now copy MAC address (HWAddr), we will use it in the next step.
+ -> and now copy MAC address (HWAddr), we will use it in the next step. Note don't copy wirelles adapter's MAC Address, when you type when you type command above there'll be three different sections. Copy the MAC Address of the one starting with letter `e`, not the wireless adapter that starts with `w`. Be careful to choose correct one. `If you don't copy the correct MAC Address your implementation won't work.`
     
     sudo mkdir /etc/sysconfig/
     
@@ -40,7 +40,7 @@ It is important to check the Etherlab documentation for configuration, for this 
 
 -> You need to change the values for MASTER0_DEVICE and DEVICE_MODULES, MASTER0_DEVICE value must be the MAC address of the Ethernet card you've selected, and DEVICE_MODULES value must be the driver you'd like to use for that device, in this case it will be generic.
 
--> For a development system, "generic" is fine. For better real-time performance, native drivers must be used. However not all NIC drivers are supported by IgH..
+-> For a development system, "generic" is fine. For better real-time performance, native drivers must be used. However not all NIC drivers are supported by IgH.
 
 -> If you want to use native drivers provided by IgH, check your network card interface driver by ;
 
