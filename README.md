@@ -152,6 +152,6 @@ If you face any problem you can check these sources :
 
 [EtherLAB Mailing List Implementation ](https://lists.etherlab.org/pipermail/etherlab-dev/2014/000384.html)
 
-[EtherLAB Documentation ](https://etherlab.org/download/ethercat/ethercat-1.5.2.pdf](https://gitlab.com/etherlab.org/ethercat/-/jobs/8139472655/artifacts/raw/pdf/ethercat_doc.pdf)
+[EtherLAB Documentation]( https://etherlab.org/download/ethercat/ethercat-1.5.2.pdf](https://gitlab.com/etherlab.org/ethercat/-/jobs/8139472655/artifacts/raw/pdf/ethercat_doc.pdf )
 
 [Source Code IgH EtherCAT](https://gitlab.com/etherlab.org/ethercat.git) (IgH EtherCAT repo page)
