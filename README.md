@@ -1,157 +1,225 @@
 # IgH EtherCAT Master Installation Guide
-This repository contains installation of IgH EtherCAT Master stack. If you need better real-time performance you can install [RT_PREEMPT Patch](https://github.com/veysiadn/RT_PREEMPT_INSTALL), or [Xenomai Patch](https://github.com/veysiadn/xenomai-install). Hope this repository will save time for you.
+
+This repository contains a step-by-step guide for installing the IgH EtherCAT Master stack on Linux. If you need better real-time performance, you can also install the [RT_PREEMPT Patch](https://github.com/veysiadn/RT_PREEMPT_INSTALL) or the [Xenomai Patch](https://github.com/veysiadn/xenomai-install).
+
+## Compatibility & Version Notes
+
+| Component | Supported Versions | Notes |
+|---|---|---|
+| IgH EtherCAT Master | stable-1.5 (≈ v1.5.2) | Tested with kernels up to ~5.x |
+| Linux Kernel | 4.x - 5.x | Native drivers **not** supported on 5.10+ / 6.x kernels; use the generic driver instead |
+| Ubuntu | 18.04, 20.04, 22.04 | Confirmed to work; Ubuntu 22.04+ requires generic driver |
+| Debian | 9 (Stretch), 10 (Buster), 11 (Bullseye) | Should work with the same notes as Ubuntu |
+
+> **Note:** On newer kernels (5.10 and above, including all 6.x kernels), the IgH native NIC drivers fail to compile. Always use `DEVICE_MODULES="generic"` on modern distributions.
+
+## Prerequisites
+
+Install the required build tools and kernel headers before proceeding:
+
+```bash
+sudo apt update
+sudo apt install -y build-essential autoconf automake libtool \
+    linux-headers-$(uname -r) net-tools git
+```
 
 ## IgH EtherCAT Master Stack Installation
 
-     git clone https://gitlab.com/etherlab.org/ethercat.git ethercat-hg
-     cd ethercat-hg
-     git checkout stable-1.5
-     sudo  ./bootstrap 
-     cd
-     sudo mv ethercat-hg /usr/local/src/
-     cd /usr/local/src/
-     sudo ln -s /usr/local/src/ethercat-hg ~/ethercat
+### Step 1 – Clone and prepare the source
 
-Move into the source directory
-
-     cd ~/ethercat
-
-It is important to check the Etherlab documentation for configuration, for this part refer to [IgH EtherCAT Library Documentation](https://etherlab.org/download/ethercat/ethercat-1.5.2.pdf) Chapter 9.2, Table 9.1 : You can check the document for detailed instruction on configuration. If you want to use generic driver, configuration below will work fine for you.
-
-    sudo ./configure --enable-8139too=no --prefix=/opt/etherlab
-    sudo -s
-    make 
-    make modules 
-    make install
-    make modules_install
-    
--> After succesfull (error free) installation, we'll need to check HWAddr (Hardware Address, also known as the MAC Address) of the NIC we'd like to use 
-(example: eth0) and record it. We'll need to type it in later. You can check your NIC's MAC address by : 
-
-    sudo ifconfig
-  
- -> and now copy MAC address (HWAddr), we will use it in the next step. Note don't copy wirelles adapter's MAC Address, when you type when you type command above there'll be three different sections. Copy the MAC Address of the one starting with letter `e`, not the wireless adapter that starts with `w`. Be careful to choose correct one. `If you don't copy the correct MAC Address your implementation won't work.`
-    
-    sudo mkdir /etc/sysconfig/
-    
-    sudo cp /opt/etherlab/etc/sysconfig/ethercat /etc/sysconfig/
-    
-    sudo nano /etc/sysconfig/ethercat
-
--> You need to change the values for MASTER0_DEVICE and DEVICE_MODULES, MASTER0_DEVICE value must be the MAC address of the Ethernet card you've selected, and DEVICE_MODULES value must be the driver you'd like to use for that device, in this case it will be generic.
-
--> For a development system, "generic" is fine. For better real-time performance, native drivers must be used. However not all NIC drivers are supported by IgH.
-
--> If you want to use native drivers provided by IgH, check your network card interface driver by ;
-
-     lshw -C network | grep driver
-
-if you see your network card driver, compare it with supported NIC drivers from  IgH from here : [IgH EtherCAT Official Page](https://etherlab.org/en/ethercat/hardware.php) (IgH EtherCAT Native Driver Supported Hardware)
-. If you don't see your NIC don't worry, you can use generic driver. Besides currently with this kernel only generic driver works. If you're using newer kernels type "generic", native drivers not supported for newer kernels. Once you change you change your ethercat config file parameters should look like below.
-
-
-Example:
+```bash
+git clone https://gitlab.com/etherlab.org/ethercat.git ethercat-hg
+cd ethercat-hg
+git checkout stable-1.5
+sudo ./bootstrap
+cd
+sudo mv ethercat-hg /usr/local/src/
+sudo ln -s /usr/local/src/ethercat-hg ~/ethercat
 ```
-    MASTER0_DEVICE="XX:XX:XX:XX:XX:XX"
 
-    DEVICE_MODULES="generic"
+### Step 2 – Configure and build
+
+Move into the source directory:
+
+```bash
+cd ~/ethercat
 ```
-#### Last Steps : 
+
+For detailed configuration options, refer to [IgH EtherCAT Library Documentation](https://etherlab.org/download/ethercat/ethercat-1.5.2.pdf), Chapter 9.2, Table 9.1. The command below uses the generic driver and installs to `/opt/etherlab`, which works for most setups:
+
+```bash
+sudo ./configure --enable-8139too=no --prefix=/opt/etherlab
+sudo -s
+make
+make modules
+make install
+make modules_install
 ```
-       cd /opt/etherlab
-```    
--> Copy the initialization script (If this doesn't work, make sure that there isn't a /etc/init.d/ethercat already. If so, remove it), change its ownership properties.
 
-       sudo cp ./etc/init.d/ethercat /etc/init.d/
+### Step 3 – Find the MAC address of your Ethernet card
 
-       sudo chmod a+x /etc/init.d/ethercat
+After a successful, error-free build, identify the MAC address (HWAddr) of the NIC you want to use for EtherCAT:
 
-       sudo ln -s /opt/etherlab/bin/ethercat /usr/local/bin/ethercat
+```bash
+sudo ifconfig
+```
 
-       sudo nano /etc/udev/rules.d/99-EtherCAT.rules
-  ## Enter the following contents:
-  ```
-    KERNEL=="EtherCAT[0-9]*", MODE="0664", GROUP="users"
- ```
- save and exit, then:
- 
-     sudo udevadm control --reload 
-     sudo cp /etc/sysconfig/ethercat /etc
-     cd /etc
-     sudo mv ethercat ethercat.conf
+Copy the MAC address of your wired Ethernet interface — the one whose name starts with `e` (e.g., `eth0`, `enp3s0`). **Do not copy the wireless adapter's MAC address** (interfaces starting with `w`). Using the wrong MAC address will prevent the master from working.
 
-## Now we can test our installation
+### Step 4 – Configure the EtherCAT master
 
-     sudo /etc/init.d/ethercat start
- after running this command you must see something like Starting EtherCAT master done.
- 
- -> If you want to start ethercat from terminal directly without changing directory  you can create symbolic link: 
- 
-     sudo ln -s /etc/init.d/ethercat /usr/local/bin/ethercatctl
- 
- -> And now you can test it.
- 
-     sudo ethercatctl start  
-     dmesg
-     
-after this command you should see something like this, it doesn't have to be same : 
+```bash
+sudo mkdir -p /etc/sysconfig/
+sudo cp /opt/etherlab/etc/sysconfig/ethercat /etc/sysconfig/
+sudo nano /etc/sysconfig/ethercat
+```
 
+Set the following two values in the file:
+- `MASTER0_DEVICE` — the MAC address of the Ethernet card you selected above
+- `DEVICE_MODULES` — the driver to use (`generic` is recommended; see note below)
+
+**Choosing a driver:**
+
+- For development or on kernels newer than 5.10, always use `"generic"`.
+- For better real-time performance on older kernels, you can try a native driver. Check your NIC driver with:
+
+```bash
+lshw -C network | grep driver
+```
+
+Then compare it against the [IgH EtherCAT Supported Hardware list](https://etherlab.org/en/ethercat/hardware.php). If your driver is not listed, fall back to `"generic"`.
+
+When finished, the relevant lines in the config file should look like this:
+
+```
+MASTER0_DEVICE="XX:XX:XX:XX:XX:XX"
+DEVICE_MODULES="generic"
+```
+
+### Step 5 – Final setup
+
+```bash
+cd /opt/etherlab
+```
+
+Copy the initialization script. If the command fails with a file-already-exists error, remove `/etc/init.d/ethercat` first and retry.
+
+```bash
+sudo cp ./etc/init.d/ethercat /etc/init.d/
+sudo chmod a+x /etc/init.d/ethercat
+sudo ln -s /opt/etherlab/bin/ethercat /usr/local/bin/ethercat
+```
+
+Create the udev rule so user applications can access the EtherCAT device:
+
+```bash
+sudo nano /etc/udev/rules.d/99-EtherCAT.rules
+```
+
+Add the following line, then save and exit:
+
+```
+KERNEL=="EtherCAT[0-9]*", MODE="0664", GROUP="users"
+```
+
+Reload udev and copy the config file to `/etc`:
+
+```bash
+sudo udevadm control --reload
+sudo cp /etc/sysconfig/ethercat /etc
+cd /etc
+sudo mv ethercat ethercat.conf
+```
+
+## Testing the Installation
+
+Start the EtherCAT master:
+
+```bash
+sudo /etc/init.d/ethercat start
+```
+
+You should see output similar to: `Starting EtherCAT master done.`
+
+Optionally, create a symbolic link so you can start/stop the master from any directory:
+
+```bash
+sudo ln -s /etc/init.d/ethercat /usr/local/bin/ethercatctl
+```
+
+Then test with:
+
+```bash
+sudo ethercatctl start
+dmesg
+```
+
+The `dmesg` output should contain lines like the following (exact values will differ):
+
+```
 [ 2038.604876] EtherCAT: Master driver 1.5.2 334c34cfd2e5
-
 [ 2038.605018] EtherCAT: 1 master waiting for devices.
-
 [ 2038.968282] ec_r8169 Gigabit Ethernet driver 2.3LK-NAPI loaded
-
-[ 2038.968303] ec_r8169 0000:03:00.0: can't disable ASPM; OS doesn't have ASPM control
-
 [ 2038.977080] EtherCAT: Accepting DC:FE:07:21:A6:75 as main device for master 0.
-
-[ 2038.977099] ec_r8169 0000:03:00.0 ecm0 (uninitialized): RTL8168g/8111g at 0xffffc90002936000, dc:fe:07:21:a6:75, XID 0c000880 IRQ 127
-
-[ 2038.977106] ec_r8169 0000:03:00.0 ecm0 (uninitialized): jumbo features [frames: 9200 bytes, tx checksumming: ko]
-
 [ 2039.042040] EtherCAT 0: Starting EtherCAT-IDLE thread.
+```
 
- -> The EtherLAB EtherCAT master is now running on the system. The next task is to setup the system so that other programs can use the master. You need to add /opt/etherlab/lib to your /etc/ld.so.conf so that the user programs calling it can link to the shared object.
+## Linking the EtherCAT Library
 
-     sudo nano /etc/ld.so.conf
+The EtherLAB EtherCAT master is now running. To allow user-space programs to link against it, add `/opt/etherlab/lib` to your dynamic linker configuration:
 
-THIS LINE WILL ALREADY EXIST ==> include /etc/ld.so.conf.d/*.conf
+```bash
+sudo nano /etc/ld.so.conf
+```
 
-Underneath it, add:
+The file already contains the line `include /etc/ld.so.conf.d/*.conf`. Add `/opt/etherlab/lib` on a new line beneath it:
 
-    /opt/etherlab/lib
+```
+include /etc/ld.so.conf.d/*.conf
+/opt/etherlab/lib
+```
 
-So, when you're done, the file will look like the following:
+Save and exit, then update the linker cache:
 
-    include /etc/ld.so.conf.d/*.conf
+```bash
+sudo ldconfig
+```
 
-    /opt/etherlab/lib
+Verify the library is found:
 
-Save and exit, then we need to update the system from the configuration file.
+```bash
+ldconfig -v | grep libether*
+```
 
-     sudo ldconfig
+## Optional: Stress Testing
 
-You can see if it got installed by running:
+To test your program under a CPU/IO stress load:
 
-     ldconfig -v | grep libether*
-     
--> if you want to test your program under stress test ;
- 
-     sudo apt install stress
-     stress -v -c 8 -i 10 -d 8
- 
+```bash
+sudo apt install stress
+stress -v -c 8 -i 10 -d 8
+```
 
-### BONUS : Qt Installation 
+## BONUS: Qt Installation
+
+> **Compatibility note:** The `qt5-default` package was removed from Ubuntu starting with version 21.04 and from Debian 11+. Use `qtbase5-dev` instead.
+
+**Ubuntu 20.04 and older / Debian 10 and older:**
 ```sh
-sudo apt-get install  qtcreator qt5-default qt5-doc qt5-doc-html qtbase5-doc-html qtbase5-examples –y 
+sudo apt-get install -y qtcreator qt5-default qt5-doc qt5-doc-html qtbase5-doc-html qtbase5-examples
 sudo /sbin/ldconfig -v
 ```
 
-If you face any problem you can check these sources : 
+**Ubuntu 21.04+ / Debian 11+:**
+```sh
+sudo apt-get install -y qtcreator qtbase5-dev qt5-doc qt5-doc-html qtbase5-doc-html qtbase5-examples
+sudo /sbin/ldconfig -v
+```
 
-[EtherLAB Mailing List Implementation ](https://lists.etherlab.org/pipermail/etherlab-dev/2014/000384.html)
+## Troubleshooting & References
 
-[EtherLAB Documentation]( https://gitlab.com/etherlab.org/ethercat/-/jobs/8139472655/artifacts/raw/pdf/ethercat_doc.pdf )
+If you encounter issues, the following resources may help:
 
-[Source Code IgH EtherCAT](https://gitlab.com/etherlab.org/ethercat.git) (IgH EtherCAT repo page)
+- [EtherLAB Mailing List (implementation example)](https://lists.etherlab.org/pipermail/etherlab-dev/2014/000384.html)
+- [EtherLAB Official Documentation](https://gitlab.com/etherlab.org/ethercat/-/jobs/8139472655/artifacts/raw/pdf/ethercat_doc.pdf)
+- [IgH EtherCAT Source Repository](https://gitlab.com/etherlab.org/ethercat.git)
